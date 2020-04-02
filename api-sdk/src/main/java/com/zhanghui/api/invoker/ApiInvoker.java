@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Api请求客户端
+ * 处理客户端请求分发
  *
- * @author 码农猿
+ * @author zhui
  */
 @Service
 public class ApiInvoker {

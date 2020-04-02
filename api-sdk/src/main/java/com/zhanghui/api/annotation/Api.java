@@ -26,7 +26,7 @@ public @interface Api {
     /**
      * @return 忽略验证签名，默认false。为true接口不执行验签操作，但其它验证会执行。
      */
-    boolean ignoreSign() default false;
+    //boolean ignoreSign() default false;
 
     String desc() default "";
 }

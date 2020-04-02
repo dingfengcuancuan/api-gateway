@@ -11,10 +11,12 @@ import com.zhanghui.api.invoker.ApiInvoker;
 import com.zhanghui.api.exception.ApiException;
 import com.zhanghui.api.request.ApiRequest;
 import com.zhanghui.api.response.ApiResponse;
+import com.zhanghui.api.util.ApiUtil;
 import com.zhanghui.api.util.ApplicationContextUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -36,6 +38,22 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
 
     private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
 
+    //初始化Api配置
+    @Value("${api.config.appname}")
+    private String apiConfigAppName;
+
+    @Value("${api.config.default.version}")
+    private String apiConfigDefaultVersion;
+
+    @Value("${api.config.sign.ignore}")
+    private String apiConfigIgnoreSign;
+
+    @Value("${api.config.timeout}")
+    private String apiConfigTimeout;
+
+    @Value("${api.config.publickey}")
+    private String apiConfigPublicKey;
+
     protected static volatile ApplicationContext ctx;
 
     protected ApplicationContext getApplicationContext() {
@@ -50,13 +68,27 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
 
         //初始化Api配置信息  后续改成读取配置
         ApiConfig apiConfig=new ApiConfig();
-        apiConfig.setAppName("api_app_name");
-        apiConfig.setDefaultVersion("1.0");
-        apiConfig.setIgnoreSign(false);
-        apiConfig.setTimeoutSeconds(30);
 
-        ApiContext.setApiConfig(apiConfig);
+        try {
 
+            if (!StringUtils.isEmpty(apiConfigAppName.trim()))
+                apiConfig.setAppName(apiConfigAppName.trim());
+            if (!StringUtils.isEmpty(apiConfigDefaultVersion.trim()))
+                apiConfig.setDefaultVersion(apiConfigDefaultVersion.trim());
+            if (!StringUtils.isEmpty(apiConfigIgnoreSign.trim()))
+                apiConfig.setIgnoreSign(Boolean.getBoolean(apiConfigIgnoreSign.trim()));
+            if (!StringUtils.isEmpty(apiConfigTimeout.trim()))
+                apiConfig.setTimeoutSeconds(Integer.parseInt(apiConfigTimeout.trim()));
+            if (!StringUtils.isEmpty(apiConfigPublicKey.trim()))
+                apiConfig.setPublicKey(apiConfigPublicKey.trim());
+
+            ApiContext.setApiConfig(apiConfig);
+
+        }catch (Exception e){
+            logger.error("API参数初始化异常",e);
+        }
+
+        //注册接口
         this.apiRegister();
     }
 
@@ -108,7 +140,7 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
                         apiDefinition.setName(api.name());
                         apiDefinition.setDescription(api.desc());
                         apiDefinition.setVersion(version);
-                        apiDefinition.setIgnoreSign(api.ignoreSign());
+                        //apiDefinition.setIgnoreSign(api.ignoreSign());
                         apiDefinition.setClazz(map.getValue().getClass());
                         apiDefinition.setBeanName(map.getKey());
                         apiDefinition.setMethodArguClass(paramClass);  //正常应该都是 String类型
@@ -147,9 +179,8 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
         //logger.info("【{}】>> 网关执行开始 >> method={} params = {}", apiRequestId, method, JSON.toJSONString(params));
         //long start = SystemClock.millisClock().now();
 
-
         //验签
-        //apiClient.checkSign(params, apiRequestId, charset, signType);
+        ApiUtil.checkSign(apiRequest);
 
         //请求接口
         ApiResponse result = apiInvoker.invoke(apiRequest.getMethod(), apiRequest.getVersion(),apiRequest.getBizContent());

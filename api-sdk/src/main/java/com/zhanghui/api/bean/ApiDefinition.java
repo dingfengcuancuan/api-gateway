@@ -32,5 +32,5 @@ public class ApiDefinition {
     /** 方法参数的class */
     private Class<?> methodArguClass;
 
-    private boolean ignoreSign;
+    //private boolean ignoreSign;
 }

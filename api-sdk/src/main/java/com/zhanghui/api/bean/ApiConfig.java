@@ -3,6 +3,7 @@ package com.zhanghui.api.bean;
 
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
@@ -38,5 +39,10 @@ public class ApiConfig {
      * 超时时间 单位：秒
      */
     private int timeoutSeconds = 10;
+
+    /**
+     * 公钥
+     */
+    private String publicKey;
 
 }

@@ -14,7 +14,20 @@
 						http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!-- Import Properties -->
-    <context:property-placeholder location="classpath:config.properties"/>
+    <!--<context:property-placeholder location="classpath:api.properties"/>-->
+
+    <!-- 非 Controller层 可用 @Value -->
+    <bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath*:api.properties</value>
+            </list>
+        </property>
+    </bean>
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="properties" ref="configProperties" />
+    </bean>
+
 
     <!-- Root Context: defines shared resources visible to all other web components -->
     <!-- 排除Controller类 -->
@@ -24,5 +37,9 @@
     </context:component-scan>
 
     <import resource="classpath*:/spring/restful/restful-context.xml" />
+
+
+
+
 
 </beans>

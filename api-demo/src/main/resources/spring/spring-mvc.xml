@@ -14,7 +14,23 @@
 						http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
-	
+
+	<!-- Import Properties -->
+	<!--<context:property-placeholder location="classpath:api.properties"/>-->
+
+	<!-- Controller层 可用 @Value -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath*:api.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="properties" ref="configProperties" />
+	</bean>
+
+
 	<!-- Enables the Spring MVC @Controller programming dto -->
 	<mvc:annotation-driven />
 
