@@ -25,7 +25,7 @@ public class ApiClientTest {
     public void init(){
         apiRequest=new ApiRequest();
         apiRequest.setAppId("testid");
-        apiRequest.setMethod("demo.print");
+        apiRequest.setMethod("demo.print1");
         apiRequest.setVersion("1.0");
         User user=new User();
         user.setId("123");

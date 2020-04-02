@@ -21,6 +21,15 @@ public class ApiResponse {
     }
 
     /**
+     * 构造器
+     *
+     */
+    public ApiResponse(String code,String msg) {
+        this.code= code;
+        this.msg= msg;
+    }
+
+    /**
      * 处理成功构造器
      *
      * @param result
@@ -40,5 +49,16 @@ public class ApiResponse {
      */
     public static ApiResponse success(Object data) {
         return new ApiResponse(data);
+    }
+
+    /**
+     * 返回失败方法
+     *
+     * @param code
+     * @param msg
+     * @return
+     */
+    public static ApiResponse error(String code,String msg) {
+        return new ApiResponse(code,msg);
     }
 }
