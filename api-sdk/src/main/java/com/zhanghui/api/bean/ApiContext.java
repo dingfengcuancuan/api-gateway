@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
 /**
- * 应用上下文,方便获取信息
+ * Api上下文,方便获取信息
  * 
  * @author zhui
  *

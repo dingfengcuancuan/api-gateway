@@ -77,7 +77,11 @@ public class ApiContainer {
 		return defaultVersion;
 	}
 
-	public static void setApiInfo(ApiDefinition api) {
+	/**
+	 * 更新Api定义信息
+	 * @param api
+	 */
+	public static void setApiDefinition(ApiDefinition api) {
 		ApiDefinition apiDefinition = apiDefinitionMap.get(api.getName() + api.getVersion());
 		if (apiDefinition != null) {
             apiDefinition=api;

@@ -1,6 +1,9 @@
 package com.zhanghui.api.bean;
 
 
+/**
+ * Api 参数配置
+ */
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

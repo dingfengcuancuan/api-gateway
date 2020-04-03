@@ -16,6 +16,9 @@ public enum EApiErrorCode {
     INVALID_REQUEST_ERROR("INVALID_REQUEST_ERROR", " 请求方式 {0} 错误 ! 请使用 {1} 方式"),
     INVALID_PARAM("INVALID_PARAM", "无效参数 >> 参数[{0}] >> 原因[{1}]"),
     INVALID_SIGN("INVALID_SIGN", "无效签名"),
+    SIGN_ERROR("SIGN_ERROR", "签名异常"),
+    PUBLIC_KEY_NOT_EXIST("PUBLIC_KEY_NOT_EXIST", "公钥不存在"),
+
     ;
 
     EApiErrorCode(String code, String msg) {

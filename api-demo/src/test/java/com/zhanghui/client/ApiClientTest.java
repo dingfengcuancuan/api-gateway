@@ -51,7 +51,7 @@ public class ApiClientTest {
     @Before
     public void init(){
         apiRequest=new ApiRequest();
-        apiRequest.setAppId("testid");
+        apiRequest.setAppId("app3");
         apiRequest.setMethod("demo.print1");
         apiRequest.setVersion("1.0");
         User user=new User();
@@ -76,7 +76,6 @@ public class ApiClientTest {
         apiRequest.setSign(sign);
 
         System.out.println("签名后："+ JSON.toJSONString(apiRequest));
-
 
         //模拟串改
         apiRequest.setAppId("cuangai");
