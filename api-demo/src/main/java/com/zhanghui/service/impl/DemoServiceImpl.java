@@ -12,4 +12,12 @@ public class DemoServiceImpl implements DemoService {
         System.out.println("调用服务，参数内容："+json);
         return json;
     }
+
+    @Override
+    public String printHttp(String json) {
+        System.out.println("HTTP调用服务，参数内容："+json);
+        return json;
+    }
+
+
 }

@@ -11,6 +11,8 @@ import com.zhanghui.api.invoker.ApiInvoker;
 import com.zhanghui.api.exception.ApiException;
 import com.zhanghui.api.request.ApiRequest;
 import com.zhanghui.api.response.ApiResponse;
+import com.zhanghui.api.router.ApiRouter;
+import com.zhanghui.api.router.ApiRouterContainer;
 import com.zhanghui.api.util.ApiUtil;
 import com.zhanghui.api.util.ApplicationContextUtil;
 import org.slf4j.Logger;
@@ -90,6 +92,10 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
 
         //注册接口
         this.apiRegister();
+
+        //初始化 差异化配置信息
+        //todo 这里暂时硬编码
+        ApiRouterContainer.addApiRouter("demo.print.http","1.0");
     }
 
 
@@ -162,10 +168,6 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
     }
 
 
-    @Autowired
-    private ApiInvoker apiInvoker;
-
-
     /**
      * 统一网关入口
      *
@@ -186,7 +188,11 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
         ApiUtil.checkToken(apiRequest);
 
         //请求接口
-        ApiResponse result = apiInvoker.invoke(apiRequest.getMethod(), apiRequest.getVersion(),apiRequest.getBizContent());
+        //本地调用 废弃 改成 路由调用 ：支持本地和http调用
+        //ApiResponse result = apiInvoker.invoke(apiRequest.getMethod(), apiRequest.getVersion(),apiRequest.getBizContent());
+
+        ApiResponse result= ApiRouter.invoke(apiRequest);
+
 
         //logger.info("【{}】>> 网关执行结束 >> method={},result = {}, times = {} ms",apiRequestId, method, JSON.toJSONString(result), (SystemClock.millisClock().now() - start));
 

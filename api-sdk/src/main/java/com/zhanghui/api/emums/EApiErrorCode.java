@@ -20,7 +20,7 @@ public enum EApiErrorCode {
     PUBLIC_KEY_NOT_EXIST("PUBLIC_KEY_NOT_EXIST", "公钥不存在"),
     TOKEN_NOT_EXIST("TOKEN_NOT_EXIST", "TOCKEN不存在"),
     TOKEN_ERROR("TOKEN_ERROR", "TOCKEN异常"),
-
+    ROUTER_ERROR("ROUTER_ERROR", "ROUTER异常"),
     ;
 
     EApiErrorCode(String code, String msg) {

@@ -117,5 +117,10 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>cn.com.servyou.common</groupId>
+            <artifactId>rest-client</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

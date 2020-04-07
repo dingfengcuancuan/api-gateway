@@ -5,6 +5,7 @@ import com.zhanghui.api.bean.ApiContainer;
 import com.zhanghui.api.bean.ApiDefinition;
 import com.zhanghui.api.emums.EApiErrorCode;
 import com.zhanghui.api.exception.ApiException;
+import com.zhanghui.api.request.ApiRequest;
 import com.zhanghui.api.response.ApiResponse;
 import com.zhanghui.api.util.ApplicationContextUtil;
 import org.slf4j.Logger;
@@ -81,7 +82,7 @@ public class ApiInvoker {
      * @param bizContent   请求
      * @author 码农猿
      */
-    public ApiResponse invoke(String name,String version,String bizContent) throws Throwable {
+    public ApiResponse invoke(String name,String version,String bizContent) {
         //获取api方法
         String apiKey=ApiContainer.getKey(name,version);
         ApiDefinition apiDefinition = ApiContainer.getApiDefinitionMap().get(apiKey);
@@ -103,13 +104,16 @@ public class ApiInvoker {
             Object obj = apiDefinition.getMethod().invoke(bean, bizContent);
             return ApiResponse.success(obj);
         } catch (Exception e) {
-            if (e instanceof InvocationTargetException) {
+            /*if (e instanceof InvocationTargetException) {
                 throw ((InvocationTargetException) e).getTargetException();
-            }
+            }*/
             throw new ApiException(EApiErrorCode.SYSTEM_ERROR);
         }
 
     }
 
+    public ApiResponse invoke(ApiRequest apiRequest) {
+       return invoke(apiRequest.getMethod(),apiRequest.getVersion(),apiRequest.getBizContent());
+    }
 
 }
