@@ -18,6 +18,8 @@ public enum EApiErrorCode {
     INVALID_SIGN("INVALID_SIGN", "无效签名"),
     SIGN_ERROR("SIGN_ERROR", "签名异常"),
     PUBLIC_KEY_NOT_EXIST("PUBLIC_KEY_NOT_EXIST", "公钥不存在"),
+    TOKEN_NOT_EXIST("TOKEN_NOT_EXIST", "TOCKEN不存在"),
+    TOKEN_ERROR("TOKEN_ERROR", "TOCKEN异常"),
 
     ;
 

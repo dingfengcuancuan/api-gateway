@@ -9,10 +9,15 @@ import com.zhanghui.api.controller.ApiController;
 import com.zhanghui.api.emums.EApiErrorCode;
 import com.zhanghui.api.exception.ApiException;
 import com.zhanghui.api.request.ApiRequest;
+import jdk.nashorn.internal.parser.Token;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
+import sun.security.provider.MD5;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,7 +47,7 @@ public class ApiUtil {
 
             ApiKey apiKey=ApiKeyContainer.getApiKey(apiRequest.getAppId());
             if(null!=apiKey && !StringUtils.isEmpty(apiKey.getPublicKey())) {
-                boolean checkSign = AlipaySignature.rsaCheckV1(map, ApiContext.getApiConfig().getPublicKey(), apiRequest.getCharset(), apiRequest.getSignType());
+                boolean checkSign = AlipaySignature.rsaCheckV1(map, apiKey.getPublicKey(), apiRequest.getCharset(), apiRequest.getSignType());
 
                 //boolean checkSign = AlipaySignature.rsaCheck(apiRequestJson, applicationProperty.getPublicKey(), apiRequest.getCharset(), apiRequest.getSignType());
                 if (!checkSign) {
@@ -61,5 +66,37 @@ public class ApiUtil {
             throw new ApiException(EApiErrorCode.SIGN_ERROR);
         }
 
+    }
+
+    //使用了默认的格式创建了一个日期格式化对象,目前用于token验证
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss") ;
+
+     /**
+     * 获取token
+     * @param appid
+     */
+    public static String createToken(String appid) {
+       return TokenUtil.getToken(appid,TokenUtil.TOKEN_SECRET);
+    }
+
+    public static void checkToken(ApiRequest apiRequest){
+        try {
+            //校验签名开关
+            if (ApiContext.getApiConfig().getIgnoreToken()) {
+                logger.warn("token校验关闭");
+                return;
+            }
+
+            String reqToken=apiRequest.getAppAuthToken().trim();
+            if(!StringUtils.isEmpty(reqToken)){
+                TokenUtil.checkToken(reqToken,TokenUtil.TOKEN_SECRET);
+            }else{
+                logger.error("token异常 >> params = {}, error = {}", JSON.toJSONString(apiRequest), EApiErrorCode.TOKEN_NOT_EXIST.getMsg());
+                throw new ApiException(EApiErrorCode.TOKEN_NOT_EXIST);
+            }
+        }catch (Exception e){
+            logger.error("token异常 >> params = {}, error = {}", JSON.toJSONString(apiRequest), e.getStackTrace());
+            throw new ApiException(EApiErrorCode.TOKEN_ERROR);
+        }
     }
 }

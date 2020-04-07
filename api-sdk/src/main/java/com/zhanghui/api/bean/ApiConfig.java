@@ -44,8 +44,10 @@ public class ApiConfig {
     private int timeoutSeconds = 10;
 
     /**
-     * 公钥
+     * 忽略token签名
+     * true: 不验证  false：验证
      */
-    private String publicKey;
+    private Boolean ignoreToken =false;
+
 
 }

@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.zhanghui.api.request.ApiRequest;
+import com.zhanghui.api.util.ApiUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,16 +53,26 @@ public class ApiClientTest {
     public void init(){
         apiRequest=new ApiRequest();
         apiRequest.setAppId("app1");
-        apiRequest.setMethod("demo.print1");
+        apiRequest.setMethod("demo.print");
         apiRequest.setVersion("1.0");
         User user=new User();
         user.setId("123");
         user.setName("zhui");
         apiRequest.setBizContent(JsonKit.toJson(user));
 
+        //模拟tocken
+        String token= ApiUtil.createToken(apiRequest.getAppId());
+
+        //正常token
+        apiRequest.setAppAuthToken(token);
+
+        //非法token
+        //apiRequest.setAppAuthToken("test_token");
+
         String apiRequestJson= JSON.toJSONString(apiRequest);
 
         System.out.println("原始："+apiRequestJson);
+
 
 
         Map map=JSON.parseObject(apiRequestJson);
@@ -78,7 +89,8 @@ public class ApiClientTest {
         System.out.println("签名后："+ JSON.toJSONString(apiRequest));
 
         //模拟串改
-        apiRequest.setMethod("cuangai");
+        //apiRequest.setMethod("cuangai");
+
 
     }
 

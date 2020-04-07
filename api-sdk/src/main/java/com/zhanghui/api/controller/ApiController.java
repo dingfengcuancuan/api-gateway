@@ -51,8 +51,8 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
     @Value("${api.config.timeout}")
     private String apiConfigTimeout;
 
-    @Value("${api.config.publickey}")
-    private String apiConfigPublicKey;
+    @Value("${api.config.token.ignore}")
+    private String apiConfigIgnoreToken;
 
     protected static volatile ApplicationContext ctx;
 
@@ -79,8 +79,8 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
                 apiConfig.setIgnoreSign(Boolean.getBoolean(apiConfigIgnoreSign.trim()));
             if (!StringUtils.isEmpty(apiConfigTimeout.trim()))
                 apiConfig.setTimeoutSeconds(Integer.parseInt(apiConfigTimeout.trim()));
-            if (!StringUtils.isEmpty(apiConfigPublicKey.trim()))
-                apiConfig.setPublicKey(apiConfigPublicKey.trim());
+            if (!StringUtils.isEmpty(apiConfigIgnoreToken.trim()))
+                apiConfig.setIgnoreToken(Boolean.getBoolean(apiConfigIgnoreToken.trim()));
 
             ApiContext.setApiConfig(apiConfig);
 
@@ -182,6 +182,9 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
         //验签
         ApiUtil.checkSign(apiRequest);
 
+        //token
+        ApiUtil.checkToken(apiRequest);
+
         //请求接口
         ApiResponse result = apiInvoker.invoke(apiRequest.getMethod(), apiRequest.getVersion(),apiRequest.getBizContent());
 
@@ -190,6 +193,10 @@ public class ApiController implements ApplicationListener<ContextRefreshedEvent>
         return result;
     }
 
+    @RequestMapping("/getToken")
+    public String getToken(String  appid){
+        return ApiUtil.createToken(appid);
+    }
 
     @RequestMapping("/test")
     public ApiResponse test(){
