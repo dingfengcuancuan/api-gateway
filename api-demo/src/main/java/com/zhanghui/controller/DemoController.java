@@ -119,7 +119,7 @@ public class DemoController {
         apiRequest.setMethod("demo.print");
         apiRequest.setVersion("1.0");
 
-        apiRequest.setBizContent("{\"name\":\"zhanghui\"}");
+        apiRequest.setBizContent("{\"name\":\"zhanghui.reflect\"}");
 
         //模拟tocken
         String token= ApiUtil.createToken(apiRequest.getAppId());

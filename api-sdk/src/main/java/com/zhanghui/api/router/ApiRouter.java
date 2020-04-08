@@ -42,8 +42,10 @@ public class ApiRouter {
              if (!CollectionUtils.isEmpty(ApiRouterContainer.getApiRouterMap())) {
                  String key=ApiRouterContainer.getKey(apiRequest.getMethod(),apiRequest.getVersion());
                  if(ApiRouterContainer.getApiRouterMap().containsKey(key)){  //走HTTP服务
+                     // *****注意 ：这里防止 循环调用，这里的地址最好不应该是本应用发布，关键是不能路由到自己这个服务。
                      //todo  获取 url地址
-                     String url="http://127.0.0.1:8080/demo/api";
+                     //String url="http://127.0.0.1:8080/demo/api";
+                     String url="http://10.199.153.64:8080/api-demo-cyh/api";
                      logger.debug("服务路由 >> 调用http服务");
                      String result=restfulClient.postForJson(url, JSON.toJSONString(apiRequest),null);
 
